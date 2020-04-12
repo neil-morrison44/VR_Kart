@@ -46,13 +46,22 @@ board.on("ready", function () {
   motors.forEach((m) => m.disable())
 
   console.log("motors started")
+  ipc.config.appspace = "uv4l"
+  ipc.config.id = ".socket"
+  ipc.config.retry = 1500
 
-  ipc.serve("/tmp/uv4l.socket", function () {
+  ipc.serve(function () {
     console.log("ipc started")
   })
   ipc.server.on("message", function (data, socket) {
     ipc.log("got a message : ".debug, data)
     ipc.server.emit(socket, "uv4l", data + " world!")
+  })
+  ipc.server.on("connect", function () {
+    ipc.log("socket connect")
+  })
+  ipc.server.on("data", function () {
+    ipc.log(data)
   })
   ipc.server.on("socket.disconnected", function (socket, destroyedSocketID) {
     ipc.log("client " + destroyedSocketID + " has disconnected!")
