@@ -44,10 +44,20 @@ board.on("ready", function () {
 
   motors.forEach((m) => m.disable())
 
-  ipc.connectTo("uv4l", "/tmp/uv4l.socket", function () {
-    ipc.of.uv4l.on("uv4l", function (data) {
+  // ipc.serve("/tmp/uv4l.socket", function () {
+  //   ipc.of.uv4l.on("uv4l", function (data) {
+  //     ipc.log("got a message : ".debug, data)
+  //     ipc.server.emit(socket, "message", data + " world!")
+  //   })
+  // })
+
+  ipc.serve("/tmp/uv4l.socket", function () {
+    ipc.server.on("uv4l", function (data, socket) {
       ipc.log("got a message : ".debug, data)
-      ipc.server.emit(socket, "message", data + " world!")
+      ipc.server.emit(socket, "uv4l", data + " world!")
+    })
+    ipc.server.on("socket.disconnected", function (socket, destroyedSocketID) {
+      ipc.log("client " + destroyedSocketID + " has disconnected!")
     })
   })
   // frontMotors.disable()
