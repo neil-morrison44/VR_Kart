@@ -1,0 +1,18 @@
+{
+  "name": "vr-kart-motors",
+  "version": "1.0.0",
+  "description": "motor control for VR Kart",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Neil Morrison",
+  "license": "MIT",
+  "dependencies": {
+    "raspi-io": "^11.0.0",
+    "eslint": "^6.8.0",
+    "johnny-five": "^1.4.0",
+    "node-ipc": "^9.1.1",
+    "prettier": "^2.0.4"
+  }
+}
