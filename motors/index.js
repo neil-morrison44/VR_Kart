@@ -45,7 +45,7 @@ board.on("ready", function () {
   motors.forEach((m) => m.disable())
 
   ipc.connectTo("uv4l", "/tmp/uv4l.socket", function () {
-    ipc.of.uv4l.on("message", function (data) {
+    ipc.of.uv4l.on("uv4l", function (data) {
       ipc.log("got a message : ".debug, data)
       ipc.server.emit(socket, "message", data + " world!")
     })
