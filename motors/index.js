@@ -5,6 +5,7 @@ const board = new five.Board({
   io: new Raspi({
     enableSoftPwm: true,
   }),
+  repl: false,
 })
 board.on("ready", function () {
   const motors = [
@@ -52,7 +53,7 @@ board.on("ready", function () {
   // })
 
   ipc.serve("/tmp/uv4l.socket", function () {
-    ipc.server.on("uv4l", function (data, socket) {
+    ipc.server.on("message", function (data, socket) {
       ipc.log("got a message : ".debug, data)
       ipc.server.emit(socket, "uv4l", data + " world!")
     })
