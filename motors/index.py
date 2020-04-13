@@ -47,7 +47,7 @@ while True:
     try:
         print('established connection with', client_address)
         while True:
-            data = connection.recv(16)
+            data = connection.recv(128)
             print('received message: ', data)
 
             time.sleep(0.01)
