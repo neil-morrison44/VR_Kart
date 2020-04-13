@@ -1,7 +1,7 @@
 python3 ../motors/index.py &
 PIDPY=$!
 
-sleep 5
+sleep 3
 
 uv4l --enable-server --driver raspicam \
 --server-option '--use-ssl=yes' --server-option '--ssl-private-key-file=/media/certs/server.key' \
@@ -13,9 +13,12 @@ uv4l --enable-server --driver raspicam \
 PIDUV=$!
 
 function stop-server(){
-  kill -2 $PIDUV;
-  kill -2 $PIDPY;
   echo "exiting...";
+  kill $PIDUV;
+  kill $PIDPY;
+
+  wait $PIDPY;
+  wait $PIDUV;
   exit
 }
 
