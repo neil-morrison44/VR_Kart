@@ -12,4 +12,4 @@ uv4l --enable-server --driver raspicam \
 
 wait
 
-trap 'kill -INT $PIDUV; kill -INT $PIDPY; exit' INT
+trap 'kill -SIGINT $PIDUV; kill -SIGINT $PIDPY; exit' SIGINT

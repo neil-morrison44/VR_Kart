@@ -52,10 +52,13 @@ while True:
 
             time.sleep(0.01)
             print(str(data)[2:-1])
-            values = json.loads(str(data)[2:-1])
+            try:
+                values = json.loads(str(data)[2:-1])
 
-            for i in range(len(values)):
-                motors[i].value = values[i]
+                for i in range(len(values)):
+                    motors[i].value = values[i]
+            except json.decoder.JSONDecodeError:
+                print("JSON Error")
 
             if data:
                 print('echo data to client')
