@@ -10,5 +10,6 @@ uv4l --enable-server --driver raspicam \
 --server-option '--webrtc-hw-vcodec-startbitrate=200' --server-option '--webrtc-receive-video=no' \
 --server-option '--max-streams=1' --server-option '--max-threads=2' --server-option '--webrtc-datachannel-socket=/tmp/uv4l.socket' & PIDUV=$!
 
-wait $PIDUV
-wait $PIDPY
+wait
+
+trap 'kill -INT $PIDUV; kill -INT $PIDPY; exit' INT
