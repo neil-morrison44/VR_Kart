@@ -52,7 +52,7 @@ while True:
 
             time.sleep(0.01)
 
-            values = json.loads(data)
+            values = json.loads(str(data))
 
             for i in range(len(values)):
                 motors[i].value = values[i]
