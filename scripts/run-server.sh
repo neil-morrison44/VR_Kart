@@ -14,4 +14,4 @@ PIDUV=$!
 
 wait
 
-trap 'kill -2 $PIDUV; kill -2 $PIDPY; echo "exiting..."; exit' SIGINT
+trap 'kill -2 $PIDUV; kill -2 $PIDPY; echo "exiting..."; exit' INT
