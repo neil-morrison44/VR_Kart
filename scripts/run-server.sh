@@ -1,4 +1,4 @@
-python3 ./motors/index.py & PIDPY=$!
+python3 ../motors/index.py & PIDPY=$!
 
 sleep 5
 
