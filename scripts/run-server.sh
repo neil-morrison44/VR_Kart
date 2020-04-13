@@ -12,6 +12,13 @@ uv4l --enable-server --driver raspicam \
 --server-option '--max-streams=1' --server-option '--max-threads=2' --server-option '--webrtc-datachannel-socket=/tmp/uv4l.socket' &
 PIDUV=$!
 
-wait
+function stop-server(){
+  kill -2 $PIDUV;
+  kill -2 $PIDPY;
+  echo "exiting...";
+  exit
+}
 
-trap 'kill -2 $PIDUV; kill -2 $PIDPY; echo "exiting..."; exit' INT
+trap stop-server SIGINT
+
+wait
