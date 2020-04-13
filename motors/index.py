@@ -14,7 +14,7 @@ except OSError:
 
 s = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
 
-print('socket_path: %s', socket_path)
+print('socket_path: ', socket_path)
 s.bind(socket_path)
 s.listen(1)
 
@@ -43,12 +43,12 @@ def cleanup():
 while True:
     print('awaiting connection...')
     connection, client_address = s.accept()
-    print('client_address %s', client_address)
+    print('client_address:', client_address)
     try:
         print('established connection with', client_address)
         while True:
             data = connection.recv(16)
-            print('received message"%s"', data)
+            print('received message: ', data)
 
             time.sleep(0.01)
             print(str(data)[2:-1])

@@ -1,4 +1,5 @@
-python3 ../motors/index.py & PIDPY=$!
+python3 ../motors/index.py &
+PIDPY=$!
 
 sleep 5
 
@@ -8,8 +9,9 @@ uv4l --enable-server --driver raspicam \
 --server-option '--enable-webrtc-video=yes' --server-option '–-enable-webrtc=yes' --auto-video_nr on \
 --server-option '--webrtc-hw-vcodec-maxbitrate=1600' --server-option '--webrtc-hw-vcodec-minbitrate=200' \
 --server-option '--webrtc-hw-vcodec-startbitrate=200' --server-option '--webrtc-receive-video=no' \
---server-option '--max-streams=1' --server-option '--max-threads=2' --server-option '--webrtc-datachannel-socket=/tmp/uv4l.socket' & PIDUV=$!
+--server-option '--max-streams=1' --server-option '--max-threads=2' --server-option '--webrtc-datachannel-socket=/tmp/uv4l.socket' &
+PIDUV=$!
 
 wait
 
-trap 'kill -SIGINT $PIDUV; kill -SIGINT $PIDPY; exit' SIGINT
+trap 'kill -2 $PIDUV; kill -2 $PIDPY; echo "exiting..."; exit' SIGINT
