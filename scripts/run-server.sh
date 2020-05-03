@@ -1,7 +1,7 @@
 python3 ../motors/index.py &
 PIDPY=$!
 
-sleep 3
+sleep 4
 
 uv4l --enable-server --driver raspicam \
 --server-option '--use-ssl=yes' --server-option '--ssl-private-key-file=/media/certs/server.key' \

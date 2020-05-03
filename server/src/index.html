@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>VR Kart</title>
+    <meta name="description" content="VR Kart" />
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <a-scene stats>
+      <a-assets timeout="10000">
+        <img
+          id="groundTexture"
+          src="https://cdn.aframe.io/a-painter/images/floor.jpg"
+          crossorigin="anonymous"
+        />
+        <img
+          id="skyTexture"
+          src="https://cdn.aframe.io/a-painter/images/sky.jpg"
+          crossorigin="anonymous"
+        />
+        <video
+          id="testVideo"
+          src="test.mp4"
+          crossorigin="anonymous"
+          autoplay
+          loop="true"
+        />
+      </a-assets>
+
+      <!-- Primitives. -->
+      <a-box position="-1 0.6 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+      <a-sphere
+        position="0 1.5 -5"
+        radius="4"
+        material="src: #testVideo"
+        rotation="-30 180 0"
+        phi-length="180"
+        theta-length="180"
+        side="double"
+        segments-width="16"
+        segments-height="16"
+      ></a-sphere>
+      <a-plane
+        position="0 .1 -4"
+        rotation="-90 0 0"
+        width="4"
+        height="4"
+        color="#7BC8A4"
+      ></a-plane>
+
+      <!-- <a-entity
+        geometry="primitive: sphere; thetaLength: 180; radius: 5000; segmentsWidth: 64; segmentsHeight: 20"
+        scale="1 1 -1"
+        material="src: #testVideo; shader: flat"
+      ></a-entity> -->
+
+      <!-- Background sky. -->
+      <a-sky
+        height="2048"
+        radius="10"
+        color="#7BC8A4"
+        theta-length="90"
+        width="2048"
+        segments-width="8"
+        segments-height="8"
+        src="#skyTexture"
+      ></a-sky>
+
+      <!-- Ground. -->
+      <a-circle src="#groundTexture" rotation="-90 0 0" radius="11"></a-circle>
+
+      <!--Tracked controls. -->
+      <a-entity hand-controls="hand: left"></a-entity>
+      <a-entity hand-controls="hand: right"></a-entity>
+    </a-scene>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  node:
+    image: "node:14"
+    user: "node"
+    working_dir: /server
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./server:/server
+    ports:
+      - "8081:8081"
+    command: "npx webpack-dev-server"
+    tty: true
