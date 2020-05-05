@@ -22,38 +22,44 @@
         <video
           id="testVideo"
           src="test.mp4"
-          crossorigin="anonymous"
+          preload="auto"
+          loop
           autoplay
-          loop="true"
-        />
+        ></video>
+        <canvas id="videoCanvas" width="512" height="512"></canvas>
       </a-assets>
 
       <!-- Primitives. -->
-      <a-box position="-1 0.6 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
       <a-sphere
         position="0 1.5 -5"
         radius="4"
-        material="src: #testVideo"
+        material="src: #videoCanvas; transparent: true;"
         rotation="-30 180 0"
         phi-length="180"
         theta-length="180"
         side="double"
         segments-width="16"
         segments-height="16"
+        canvas-updater
       ></a-sphere>
-      <a-plane
-        position="0 .1 -4"
-        rotation="-90 0 0"
-        width="4"
-        height="4"
-        color="#7BC8A4"
-      ></a-plane>
-
-      <!-- <a-entity
-        geometry="primitive: sphere; thetaLength: 180; radius: 5000; segmentsWidth: 64; segmentsHeight: 20"
-        scale="1 1 -1"
-        material="src: #testVideo; shader: flat"
-      ></a-entity> -->
+      <a-torus
+        color="#333333"
+        arc="180"
+        radius="1.5"
+        radius-tubular="0.1"
+        segments-radial="8"
+        segments-tubular="8"
+      ></a-torus>
+      <a-torus
+        color="#333333"
+        arc="360"
+        radius="1"
+        radius-tubular="0.05"
+        rotation="90 0 0"
+        position="0 0.6 0"
+        segments-radial="8"
+        segments-tubular="8"
+      ></a-torus>
 
       <!-- Background sky. -->
       <a-sky
