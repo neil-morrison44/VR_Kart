@@ -8,7 +8,7 @@
   </head>
   <body>
     <a-scene stats>
-      <a-assets timeout="10000">
+      <a-assets>
         <img
           id="groundTexture"
           src="https://cdn.aframe.io/a-painter/images/floor.jpg"
@@ -29,7 +29,6 @@
         <canvas id="videoCanvas" width="512" height="512"></canvas>
       </a-assets>
 
-      <!-- Primitives. -->
       <a-sphere
         position="0 1.5 -5"
         radius="4"
@@ -61,6 +60,26 @@
         segments-tubular="8"
       ></a-torus>
 
+      <a-torus
+        color="#ffa500"
+        arc="350"
+        radius="0.16"
+        radius-tubular="0.015"
+        rotation="145 0 0"
+        position="0 0.7 -0.5"
+        segments-radial="8"
+        segments-tubular="16"
+        class="steering-wheel"
+        event-set__grab="material.color: #FFEF4F"
+        event-set__grabend="material.color: #F2E646"
+        event-set__hit="material.color: #F2E646"
+        event-set__hitend="material.color: #EF2D5E"
+        event-set__mousedown="material.color: #FFEF4F"
+        event-set__mouseenter="material.color: #F2E646"
+        event-set__mouseleave="material.color: #EF2D5E"
+        event-set__mouseup="material.color: #F2E646"
+      ></a-torus>
+
       <!-- Background sky. -->
       <a-sky
         height="2048"
@@ -77,8 +96,16 @@
       <a-circle src="#groundTexture" rotation="-90 0 0" radius="11"></a-circle>
 
       <!--Tracked controls. -->
-      <a-entity hand-controls="hand: left"></a-entity>
-      <a-entity hand-controls="hand: right"></a-entity>
+      <a-entity
+        hand-controls="hand: left"
+        aabb-collider="objects: .steering-wheel; debug: true;"
+        wheel
+      ></a-entity>
+      <a-entity
+        hand-controls="hand: right"
+        aabb-collider="objects: .steering-wheel; debug: true;"
+        wheel
+      ></a-entity>
     </a-scene>
   </body>
 </html>

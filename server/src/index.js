@@ -6,6 +6,10 @@ import "./video/test.mp4"
 
 import "aframe"
 
+import "aframe-aabb-collider-component"
+
+import "./components/wheel"
+
 const videoPaddingX = 100
 const videoPaddingY = 400
 
