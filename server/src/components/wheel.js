@@ -11,18 +11,60 @@ AFRAME.registerComponent("wheel", {
 
     // create plane at the same rotation as the wheel (and positioned similarly)
     // use it so the maths is 2D later on
+
+    this.mathPlane = new THREE.Plane()
+
+    const { z } = this.el.getAttribute("rotation")
+    this.startingAngle = this.currentWheelAngle = z
   },
 
   play: function () {
-    const el = this.el
-    el.addEventListener("hitstart", this._onHit)
-    el.addEventListener("hitend", this._onHitEnd)
+    this.el.addEventListener("hitstart", this._onHit)
+    this.el.addEventListener("hitend", this._onHitEnd)
+
+    this.addPlane()
+  },
+
+  addPlane: function () {
+    const planeEl = document.createElement("a-plane")
+    console.log(this.el.getAttribute("position"))
+
+    planeEl.setAttribute("position", this.el.getAttribute("position"))
+    const { x, y, z } = this.el.getAttribute("rotation")
+    planeEl.setAttribute("rotation", `${x - 180} ${y} ${z}`)
+    planeEl.setAttribute("width", "0.5")
+    planeEl.setAttribute("height", "0.5")
+    planeEl.setAttribute("visible", "false")
+    planeEl.setAttribute("class", "wheelPlane")
+
+    this.el.sceneEl.appendChild(planeEl)
+    this.planeEl = planeEl
+
+    this.planeEl.addEventListener("raycaster-intersected", ({ detail }) => {
+      if (this.intersectingHandEl) return
+      this.intersectingHandEl = detail.el
+      this.getCurrentAngle = () => {
+        const { uv } = detail.getIntersection(this.planeEl)
+        return (
+          (360 + Math.atan2(uv.y - 0.5, uv.x - 0.5) * (180 / Math.PI)) % 360
+        )
+      }
+    })
+
+    this.planeEl.addEventListener(
+      "raycaster-intersected-cleared",
+      ({ detail }) => {
+        if (this.intersectingHandEl === detail.el) {
+          delete this.intersectingHandEl
+          delete this.getCurrentAngle
+        }
+      }
+    )
   },
 
   pause: function () {
-    const el = this.el
-    el.removeEventListener("hitstart", this._onHit)
-    el.removeEventListener("hitend", this._onHitEnd)
+    this.el.removeEventListener("hitstart", this._onHit)
+    this.el.removeEventListener("hitend", this._onHitEnd)
     if (this.handEl) {
       this.handEl.removeEventListener("buttondown", this._onGripStart)
       this.handEl.removeEventListener("buttonup", this._onGripEnd)
@@ -35,6 +77,7 @@ AFRAME.registerComponent("wheel", {
     this.grabbing = true
     this.pressedButtonId = evt.detail.id
     delete this.previousPosition
+    delete this.previousAngle
   },
 
   onGripEnd: function (evt) {
@@ -68,32 +111,36 @@ AFRAME.registerComponent("wheel", {
 
   tick: function () {
     const handEl = this.handEl
-    if (!handEl || !this.grabbing) return
+    console.log(this.currentAngle)
+    if (!handEl || !this.grabbing || !this.intersectingHandEl) {
+      this.rotateToStart()
+      return
+    }
 
     this.updateDelta()
-    const position = this.el.getAttribute("position")
-    this.el.setAttribute("position", {
-      x: position.x + this.deltaPosition.x,
-      y: position.y + this.deltaPosition.y,
-      z: position.z + this.deltaPosition.z,
-    })
+    const { x, y } = this.el.getAttribute("rotation")
+
+    this.currentWheelAngle = this.currentWheelAngle - this.deltaAngle
+    this.el.setAttribute("rotation", { x, y, z: this.currentWheelAngle })
+  },
+
+  rotateToStart: function () {
+    const { x, y } = this.el.getAttribute("rotation")
+    let adjust = 0
+    if (this.currentWheelAngle > this.startingAngle) adjust = 1
+    if (this.currentWheelAngle < this.startingAngle) adjust = -1
+    this.currentWheelAngle = Math.round(this.currentWheelAngle - adjust)
+    if (adjust !== 0) {
+      this.el.setAttribute("rotation", { x, y, z: this.currentWheelAngle })
+    }
   },
 
   updateDelta: function () {
-    const currentPosition = this.currentPosition
-    this.handEl.object3D.updateMatrixWorld()
-    currentPosition.setFromMatrixPosition(this.handEl.object3D.matrixWorld)
-    if (!this.previousPosition) {
-      this.previousPosition = new THREE.Vector3()
-      this.previousPosition.copy(currentPosition)
+    const currentAngle = this.getCurrentAngle()
+    if (!this.previousAngle) {
+      this.previousAngle = currentAngle
     }
-    const previousPosition = this.previousPosition
-    const deltaPosition = {
-      x: currentPosition.x - previousPosition.x,
-      y: currentPosition.y - previousPosition.y,
-      z: currentPosition.z - previousPosition.z,
-    }
-    this.previousPosition.copy(currentPosition)
-    this.deltaPosition = deltaPosition
+    this.deltaAngle = currentAngle - this.previousAngle
+    this.previousAngle = currentAngle
   },
 })
