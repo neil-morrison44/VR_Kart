@@ -70,14 +70,8 @@
         segments-radial="8"
         segments-tubular="16"
         class="steering-wheel"
-        event-set__grab="material.color: #FFEF4F"
-        event-set__grabend="material.color: #F2E646"
-        event-set__hit="material.color: #F2E646"
-        event-set__hitend="material.color: #EF2D5E"
-        event-set__mousedown="material.color: #FFEF4F"
-        event-set__mouseenter="material.color: #F2E646"
-        event-set__mouseleave="material.color: #EF2D5E"
-        event-set__mouseup="material.color: #F2E646"
+        aabb-collider="objects: .hand; debug: true;"
+        wheel
       ></a-torus>
 
       <!-- Background sky. -->
@@ -97,14 +91,14 @@
 
       <!--Tracked controls. -->
       <a-entity
+        class="hand"
         hand-controls="hand: left"
-        aabb-collider="objects: .steering-wheel; debug: true;"
-        wheel
+        data-aabb-collider-dynamic="true"
       ></a-entity>
       <a-entity
+        class="hand"
         hand-controls="hand: right"
-        aabb-collider="objects: .steering-wheel; debug: true;"
-        wheel
+        data-aabb-collider-dynamic="true"
       ></a-entity>
     </a-scene>
   </body>

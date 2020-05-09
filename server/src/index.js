@@ -48,15 +48,15 @@ function renderCanvas() {
   window.requestAnimationFrame(renderCanvas)
 }
 
-window.addEventListener("DOMContentLoaded", setupVideoCanvas)
+//window.addEventListener("DOMContentLoaded", setupVideoCanvas)
 
-AFRAME.registerComponent("canvas-updater", {
-  dependencies: ["geometry", "material"],
+// AFRAME.registerComponent("canvas-updater", {
+//   dependencies: ["geometry", "material"],
 
-  tick: function () {
-    const el = this.el
-    const material = el.getObject3D("mesh").material
-    if (!material.map) return
-    material.map.needsUpdate = true
-  },
-})
+//   tick: function () {
+//     const el = this.el
+//     const material = el.getObject3D("mesh").material
+//     if (!material.map) return
+//     material.map.needsUpdate = true
+//   },
+// })
