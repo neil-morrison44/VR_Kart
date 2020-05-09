@@ -1,4 +1,7 @@
 AFRAME.registerComponent("wheel", {
+  schema: {
+    maxTurn: { type: "int", default: 270 },
+  },
   init: function () {
     // Bind event handlers
     this._onHit = this.onHit.bind(this)
@@ -23,11 +26,27 @@ AFRAME.registerComponent("wheel", {
     this.el.addEventListener("hitend", this._onHitEnd)
 
     this.addPlane()
+    this.addNub()
+  },
+
+  addNub: function () {
+    const nubEl = document.createElement("a-triangle")
+
+    nubEl.setAttribute("vertex-a", "0 0.06 0")
+    nubEl.setAttribute("vertex-b", "-0.03 -0.03 0")
+    nubEl.setAttribute("vertex-c", "0.03 -0.03 0")
+    nubEl.setAttribute("rotation", "180 0 180")
+
+    const radius = this.el.getAttribute("radius")
+    const thickness = this.el.getAttribute("radius-tubular")
+    nubEl.setAttribute("position", `0 -${radius} -${thickness * 2}`)
+    nubEl.setAttribute("color", "red")
+
+    this.el.appendChild(nubEl)
   },
 
   addPlane: function () {
     const planeEl = document.createElement("a-plane")
-    console.log(this.el.getAttribute("position"))
 
     planeEl.setAttribute("position", this.el.getAttribute("position"))
     const { x, y, z } = this.el.getAttribute("rotation")
@@ -111,7 +130,6 @@ AFRAME.registerComponent("wheel", {
 
   tick: function () {
     const handEl = this.handEl
-    console.log(this.currentAngle)
     if (!handEl || !this.grabbing || !this.intersectingHandEl) {
       this.rotateToStart()
       return
@@ -120,19 +138,47 @@ AFRAME.registerComponent("wheel", {
     this.updateDelta()
     const { x, y } = this.el.getAttribute("rotation")
 
-    this.currentWheelAngle = this.currentWheelAngle - this.deltaAngle
+    this.currentWheelAngle = THREE.Math.clamp(
+      this.currentWheelAngle - this.deltaAngle,
+      -this.data.maxTurn,
+      this.data.maxTurn
+    )
     this.el.setAttribute("rotation", { x, y, z: this.currentWheelAngle })
+    this.emitChangeEvent()
   },
 
   rotateToStart: function () {
+    if (this.currentWheelAngle === 0) return
     const { x, y } = this.el.getAttribute("rotation")
+    const { maxTurn } = this.data
+
+    const speed =
+      1 +
+      THREE.Math.smoothstep(Math.abs(this.currentWheelAngle), 0, maxTurn) * 10
+
+    console.log(speed)
+
     let adjust = 0
-    if (this.currentWheelAngle > this.startingAngle) adjust = 1
-    if (this.currentWheelAngle < this.startingAngle) adjust = -1
+    if (this.currentWheelAngle > this.startingAngle) adjust = speed
+    if (this.currentWheelAngle < this.startingAngle) adjust = -speed
     this.currentWheelAngle = Math.round(this.currentWheelAngle - adjust)
+
     if (adjust !== 0) {
       this.el.setAttribute("rotation", { x, y, z: this.currentWheelAngle })
+      this.emitChangeEvent()
     }
+  },
+
+  emitChangeEvent: function () {
+    const { maxTurn } = this.data
+    const direction = THREE.Math.mapLinear(
+      this.currentWheelAngle,
+      -maxTurn,
+      maxTurn,
+      -1,
+      1
+    )
+    this.el.emit("directionchange", { direction }, false)
   },
 
   updateDelta: function () {
@@ -141,6 +187,14 @@ AFRAME.registerComponent("wheel", {
       this.previousAngle = currentAngle
     }
     this.deltaAngle = currentAngle - this.previousAngle
+
+    const x = THREE.Math.degToRad(currentAngle)
+    const y = THREE.Math.degToRad(this.previousAngle)
+
+    this.deltaAngle = THREE.Math.radToDeg(
+      Math.atan2(Math.sin(x - y), Math.cos(x - y))
+    )
+
     this.previousAngle = currentAngle
   },
 })
