@@ -54,7 +54,10 @@ AFRAME.registerComponent("wheel", {
     this.hitHasEnded = false
   },
 
-  onHitEnd: function () {
+  onHitEnd: function (evt) {
+    // known issue where this can be triggered by the other hand, not sure how to solve it
+    // doesn't put the app into too weird of a state though, just means you have to leave and re-enter
+    // the wheel bbox
     if (this.grabbing) return
     this.hitHasEnded = true
     if (this.handEl) {
