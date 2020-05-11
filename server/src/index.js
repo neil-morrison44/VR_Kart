@@ -9,6 +9,7 @@ import "aframe"
 import "aframe-aabb-collider-component"
 
 import "./components/wheel"
+import "./components/throttle"
 
 const videoPaddingX = 100
 const videoPaddingY = 400

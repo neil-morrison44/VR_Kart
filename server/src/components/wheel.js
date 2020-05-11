@@ -47,8 +47,9 @@ AFRAME.registerComponent("wheel", {
 
   addPlane: function () {
     const planeEl = document.createElement("a-plane")
-
-    planeEl.setAttribute("position", this.el.getAttribute("position"))
+    const { x: xPos, y: yPos, z: zPos } = this.el.getAttribute("position")
+    const thickness = this.el.getAttribute("radius-tubular")
+    planeEl.setAttribute("position", `${xPos} ${yPos} ${zPos - thickness * 3}`)
     const { x, y, z } = this.el.getAttribute("rotation")
     planeEl.setAttribute("rotation", `${x - 180} ${y} ${z}`)
     planeEl.setAttribute("width", "0.5")
@@ -155,8 +156,6 @@ AFRAME.registerComponent("wheel", {
     const speed =
       1 +
       THREE.Math.smoothstep(Math.abs(this.currentWheelAngle), 0, maxTurn) * 10
-
-    console.log(speed)
 
     let adjust = 0
     if (this.currentWheelAngle > this.startingAngle) adjust = speed

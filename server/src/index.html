@@ -59,7 +59,6 @@
         segments-radial="8"
         segments-tubular="8"
       ></a-torus>
-
       <a-torus
         color="#ffa500"
         radius="0.16"
@@ -72,6 +71,16 @@
         aabb-collider="objects: .hand; debug: true;"
         wheel
       ></a-torus>
+
+      <a-box
+        color="grey"
+        depth="0.04"
+        height="0.04"
+        width="0.1"
+        position="0.45 0.6 -0.5"
+        throttle="length: 0.2; steps: 11;"
+        aabb-collider="objects: .hand; debug: true;"
+      ></a-box>
 
       <!-- Background sky. -->
       <a-sky
@@ -93,13 +102,13 @@
         class="hand"
         hand-controls="hand: left"
         data-aabb-collider-dynamic="true"
-        raycaster="objects: .wheelPlane; far: 0.1; showLine: true;"
+        raycaster="objects: .wheelPlane; far: 0.2; showLine: true;"
       ></a-entity>
       <a-entity
         class="hand"
         hand-controls="hand: right"
         data-aabb-collider-dynamic="true"
-        raycaster="objects: .wheelPlane; far: 0.1; showLine: true;"
+        raycaster="objects: .wheelPlane; far: 0.2; showLine: true;"
       ></a-entity>
     </a-scene>
   </body>
