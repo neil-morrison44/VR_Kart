@@ -177,7 +177,7 @@ AFRAME.registerComponent("wheel", {
       -1,
       1
     )
-    this.el.emit("directionchange", { direction }, false)
+    this.el.emit("onchange", { value: direction }, false)
   },
 
   updateDelta: function () {

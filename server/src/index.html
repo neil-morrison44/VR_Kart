@@ -29,8 +29,9 @@
         <canvas id="videoCanvas" width="512" height="512"></canvas>
       </a-assets>
 
+      <!-- Video  -->
       <a-sphere
-        position="0 1.5 -5"
+        position="0 0 -2"
         radius="4"
         material="src: #videoCanvas; transparent: true;"
         rotation="-30 180 0"
@@ -68,10 +69,11 @@
         segments-radial="8"
         segments-tubular="16"
         class="steering-wheel"
-        aabb-collider="objects: .hand; debug: true;"
+        aabb-collider="objects: .hand;"
         wheel
       ></a-torus>
 
+      <!-- throttle -->
       <a-box
         color="grey"
         depth="0.04"
@@ -79,12 +81,13 @@
         width="0.1"
         position="0.45 0.6 -0.5"
         throttle="length: 0.2; steps: 11;"
-        aabb-collider="objects: .hand; debug: true;"
+        aabb-collider="objects: .hand;"
+        class="throttle"
       ></a-box>
 
       <!-- Background sky. -->
       <a-sky
-        height="2048"
+        height="20"
         radius="10"
         color="#7BC8A4"
         theta-length="90"
@@ -93,22 +96,23 @@
         segments-height="8"
         src="#skyTexture"
       ></a-sky>
+      <!-- <a-scene background="color: black"></a-scene> -->
 
       <!-- Ground. -->
-      <a-circle src="#groundTexture" rotation="-90 0 0" radius="11"></a-circle>
+      <a-circle src="#groundTexture" rotation="-90 0 0" radius="1.1"></a-circle>
 
       <!--Tracked controls. -->
       <a-entity
         class="hand"
         hand-controls="hand: left"
         data-aabb-collider-dynamic="true"
-        raycaster="objects: .wheelPlane; far: 0.2; showLine: true;"
+        raycaster="objects: .wheelPlane; far: 0.2;"
       ></a-entity>
       <a-entity
         class="hand"
         hand-controls="hand: right"
         data-aabb-collider-dynamic="true"
-        raycaster="objects: .wheelPlane; far: 0.2; showLine: true;"
+        raycaster="objects: .wheelPlane; far: 0.2;"
       ></a-entity>
     </a-scene>
   </body>

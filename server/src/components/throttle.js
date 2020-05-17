@@ -20,7 +20,6 @@ AFRAME.registerComponent("throttle", {
 
     this.forwardColor = new THREE.Color("#00ff00")
     this.reverseColor = new THREE.Color("#ff0000")
-    console.log(this.el.getAttribute("color"))
     this.startingColor = new THREE.Color(this.el.getAttribute("color"))
     this.currentColor = this.startingColor.clone()
   },
@@ -61,6 +60,7 @@ AFRAME.registerComponent("throttle", {
   },
 
   onGripStart: function (evt) {
+    console.log("on grip start", evt.detail.id)
     if (evt.detail.id !== 1) return
     this.handEl.addEventListener("buttonup", this._onGripEnd)
     this.grabbing = true
@@ -69,6 +69,7 @@ AFRAME.registerComponent("throttle", {
   },
 
   onGripEnd: function (evt) {
+    console.log("on grip end", evt.detail.id, this.handEl, this.hitHasEnded)
     if (this.pressedButtonId !== evt.detail.id || !this.handEl) return
     this.grabbing = false
     if (this.hitHasEnded) {
@@ -78,6 +79,7 @@ AFRAME.registerComponent("throttle", {
   },
 
   onHit: function (evt) {
+    console.log("on hit", this.handEl)
     if (this.handEl) return
     const handEl = evt.detail.intersectedEls[0]
     this.handEl = handEl
@@ -86,8 +88,9 @@ AFRAME.registerComponent("throttle", {
   },
 
   onHitEnd: function () {
-    if (this.grabbing) return
+    console.log("on hit end", this.grabbing, this.handEl)
     this.hitHasEnded = true
+    if (this.grabbing) return
     if (this.handEl) {
       this.handEl.removeEventListener("buttondown", this._onGripStart)
       this.handEl = undefined
@@ -96,7 +99,7 @@ AFRAME.registerComponent("throttle", {
 
   tick: function () {
     const handEl = this.handEl
-    if (!handEl || !this.grabbing) return
+    if (!handEl || !this.grabbing || this.hitHasEnded) return
 
     this.updateDelta()
     const position = this.el.getAttribute("position")
@@ -115,7 +118,6 @@ AFRAME.registerComponent("throttle", {
     )
     const steps = this.data.steps - 1
     const stepValue = Math.round(roughValue * steps) / steps
-    console.log(stepValue)
     this.mathLine.at(roughValue, this.clampedVector3)
 
     this.el.setAttribute("position", this.clampedVector3)
@@ -137,7 +139,7 @@ AFRAME.registerComponent("throttle", {
     this.el.setAttribute("color", this.currentColor.getStyle())
 
     this.el.emit(
-      "throttlechange",
+      "onchange",
       { value: THREE.Math.mapLinear(this.value, 0, 1, -1, 1) },
       false
     )
