@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <title>VR Kart</title>
     <meta name="description" content="VR Kart" />
-    <script src="main.js"></script>
   </head>
   <body>
     <a-scene stats>
@@ -19,21 +18,10 @@
           src="https://cdn.aframe.io/a-painter/images/sky.jpg"
           crossorigin="anonymous"
         />
-        <video
-          id="testVideo"
-          src="test.mp4"
-          preload="auto"
-          loop
-          autoplay
-        ></video>
+        <video id="remote-video"></video>
         <canvas id="videoCanvas" width="512" height="512"></canvas>
       </a-assets>
 
-      <a-videosphere
-        src="#testVideo"
-        segments-width="16"
-        segments-height="16"
-      ></a-videosphere>
       <!-- Video  -->
       <a-sphere
         position="0 0 -2"
@@ -108,13 +96,13 @@
 
       <!--Tracked controls. -->
       <a-entity
-        class="hand"
+        class="hand left-hand"
         hand-controls="hand: left"
         data-aabb-collider-dynamic="true"
         raycaster="objects: .wheelPlane; far: 0.2;"
       ></a-entity>
       <a-entity
-        class="hand"
+        class="hand right-hand"
         hand-controls="hand: right"
         data-aabb-collider-dynamic="true"
         raycaster="objects: .wheelPlane; far: 0.2;"

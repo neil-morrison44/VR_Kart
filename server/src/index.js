@@ -1,7 +1,5 @@
 console.log("hello")
 
-import "./index.html"
-
 import "./video/test.mp4"
 
 import "aframe"
@@ -22,7 +20,7 @@ let video = null
 function setupVideoCanvas() {
   videoCanvas = document.querySelector("#videoCanvas")
   ctx = videoCanvas.getContext("2d")
-  video = document.querySelector("#testVideo")
+  video = document.querySelector("#remote-video")
   ctx.translate(ctx.canvas.width, 0)
   ctx.scale(-1, 1)
   renderCanvas()
@@ -62,7 +60,10 @@ function renderCanvas() {
 window.addEventListener("DOMContentLoaded", () => {
   setupVideoCanvas()
   setupEventListeners()
-  startCall()
+
+  document.querySelector("right-hand").addEventListener("abuttonup", () => {
+    startCall()
+  })
 })
 
 AFRAME.registerComponent("canvas-updater", {

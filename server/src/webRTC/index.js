@@ -1,3 +1,5 @@
+import { start_call, send_message } from "./uv4l"
+
 let throttle = 0
 let direction = 0
 let motorValues = [0, 0, 0, 0]
@@ -26,6 +28,7 @@ const MOTOR_INTERVAL = 1000
 const startSendingMotorValues = () => {
   motorInterval = window.setInterval(() => {
     console.log({ motorValues })
+    send_message(JSON.stringify(motorValues))
   }, MOTOR_INTERVAL)
 }
 
@@ -51,7 +54,7 @@ const setupEventListeners = () => {
 }
 
 const startCall = () => {
-  startSendingMotorValues()
+  start_call(() => startSendingMotorValues())
 }
 
 export { setupEventListeners, startSendingMotorValues, startCall }
